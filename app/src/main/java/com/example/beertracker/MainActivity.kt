@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,9 +16,20 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+        decrementButton.setOnClickListener { view ->
+            val originalValue = totalBeersLeft.text.toString().toInt()
+            val newValue = originalValue - 1
+            totalBeersLeft.text = newValue.toString()
+            Snackbar.make(view, "Hope you enjoyed it! Beer count changed from $originalValue to $newValue",
+                Snackbar.LENGTH_LONG).show()
+        }
+
+        incrementButton.setOnClickListener { view ->
+            val originalValue = totalBeersLeft.text.toString().toInt()
+            val newValue = originalValue + 1
+            totalBeersLeft.text = newValue.toString()
+            Snackbar.make(view, "You deserve a beer! Beer count changed from $originalValue to $newValue",
+                Snackbar.LENGTH_LONG).show()
         }
     }
 
