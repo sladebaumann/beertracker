@@ -10,6 +10,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import android.R.attr.y
 import android.R.attr.x
+import android.R.raw
+import android.media.MediaPlayer
 import android.opengl.Matrix
 
 
@@ -28,6 +30,13 @@ class MainActivity : AppCompatActivity() {
         var initialVal = dbHandler.getBeer()
         totalBeersLeft.text = initialVal.toString()
 
+        var openBottleSound = MediaPlayer.create(this, R.raw.beer_bottle_open)
+        var openCanSound = MediaPlayer.create(this, R.raw.beer_can_open)
+        var openFridgeSound = MediaPlayer.create(this, R.raw.beer_pour)
+
+        val removeBeerSoundList = listOf(openBottleSound, openCanSound)
+        val addBeerSoundList = listOf(openFridgeSound)
+
         decrementButton.setOnClickListener { view ->
             initialVal = dbHandler.getBeer()
 
@@ -36,6 +45,8 @@ class MainActivity : AppCompatActivity() {
                 Snackbar.make(view, "You are all out of beer!!!",
                     Snackbar.LENGTH_LONG).show()
             } else {
+                // this will randomly choose between all opening beer sounds
+                removeBeerSoundList.shuffled().take(1)[0].start()
                 dbHandler.removeBeer(1)
                 val newVal = dbHandler.getBeer()
                 totalBeersLeft.text = newVal.toString()
@@ -46,6 +57,8 @@ class MainActivity : AppCompatActivity() {
 
         incrementButton.setOnClickListener { view ->
             initialVal = dbHandler.getBeer()
+            // this will randomly choose between all adding beer sounds
+            addBeerSoundList.shuffled().take(1)[0].start()
             dbHandler.addBeer(1)
             val newVal = dbHandler.getBeer()
             totalBeersLeft.text = newVal.toString()
